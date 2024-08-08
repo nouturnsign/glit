@@ -9,20 +9,21 @@ ColumnLimit: 120
 DerivePointerAlignment: false
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:          '^<'
-    Priority:       1
-  - Regex:          '^[^<]*$'
-    Priority:       2
-  - Regex:          '^"'
-    Priority:       3
-  - Regex:          '^<.*>'
-    Priority:       4
+  - Regex: '.*/.*|.*imgui.*'
+    Priority: 3
+  - Regex: '^[^/]*\.h$'
+    Priority: 1
+  - Regex: '^[^/]*$'
+    Priority: 2
+  - Regex: '.*'
+    Priority: 4
 IndentWidth: 4
 InsertNewlineAtEOF: true
 Language: Cpp
 PointerAlignment: Right
 ReflowComments: true
 SeparateDefinitionBlocks: Always
+SortIncludes: CaseInsensitive
 SpaceAfterCStyleCast: true
 SpaceBeforeParens: ControlStatements
 SpacesInParentheses: false
