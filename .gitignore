@@ -19,6 +19,7 @@
 
 # Clang tooling
 *.clangd
+.cache
 
 # Doxygen documentation
 /docs/
