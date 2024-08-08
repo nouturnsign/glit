@@ -1,0 +1,30 @@
+BasedOnStyle: Google
+AllowShortIfStatementsOnASingleLine: false
+AlignAfterOpenBracket: Align
+BreakBeforeBraces: Allman
+ColumnLimit: 120
+DerivePointerAlignment: false
+IndentWidth: 4
+Language: Cpp
+PointerAlignment: Right
+ReflowComments: true
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+TabWidth: 4
+UseTab: Never
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:          '^<'
+    Priority:       1
+  - Regex:          '^[^<]*$'
+    Priority:       2
+  - Regex:          '^"'
+    Priority:       3
+  - Regex:          '^<.*>'
+    Priority:       4
+SpaceAfterCStyleCast: true
+AlignConsecutiveDeclarations: true
+AllowShortFunctionsOnASingleLine: false
+InsertNewlineAtEOF: true
+SeparateDefinitionBlocks: Always
+AlwaysBreakAfterDefinitionReturnType: TopLevel # BreakAfterReturnType: TopLevel

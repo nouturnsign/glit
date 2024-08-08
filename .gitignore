@@ -1,0 +1,68 @@
+# C++ build artifacts
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+/Debian/
+*.o
+*.obj
+*.a
+*.so
+*.exe
+*.out
+
+# IDE and editor-specific files
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+*.vscode/
+
+# Clang tooling
+*.clangd
+
+# Doxygen documentation
+/docs/
+
+# Log files
+*.log
+
+# Compiled binary files
+*.dSYM/
+
+# Windows-specific files
+Thumbs.db
+Desktop.ini
+
+# macOS-specific files
+.DS_Store
+
+# Linux-specific files
+*~
+
+# Build directories
+build/
+cmake-build-debug/
+cmake-build-release/
+
+# Catch2 and other test-related
+*.gcno
+*.gcda
+*.gcov
+
+# Generated files
+*.gch
+*.pch
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.old
+
+# File-based build systems
+*.ninja
+
+# Other system-specific files
+*.pid
+*.seed
+*.pid.lock
