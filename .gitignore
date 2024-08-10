@@ -21,9 +21,6 @@
 *.clangd
 .cache
 
-# Doxygen documentation
-/docs/
-
 # Log files
 *.log
 
