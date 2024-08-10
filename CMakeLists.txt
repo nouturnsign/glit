@@ -13,7 +13,12 @@ if(NOT DEFINED GLIT_MASTER_PROJECT)
 endif()
 
 option(GLIT_BUILD_DOCS "Build glit documentation with Doxygen" ${GLIT_MASTER_PROJECT})
+option(GLIT_USE_INSTALLED_DEPS
+    "Resolve glit's dependencies via user-installed packages; requires defining <package>_DIR"
+    OFF
+)
 
+message(STATUS "glit - Configuring external dependencies")
 add_subdirectory(external)
 add_executable(${PROJECT_NAME} src/main.cpp)
 add_subdirectory(src)
@@ -22,5 +27,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE -DGLFW_INCLUDE_NONE)
 
 if (GLIT_BUILD_DOCS)
+    message(STATUS "glit - Configuring documentation")
     add_subdirectory(docs)
 endif()
