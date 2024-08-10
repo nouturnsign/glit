@@ -118,9 +118,11 @@ GUI::render_frame()
         ImGui::End();
         return;
     }
+    const ImGuiStyle &style = ImGui::GetStyle();
     for (const auto &commit_node : m_commit_nodes)
     {
-        commit_node.render();
+        ImVec2 screen_pos = logical_to_screen(commit_node.get_logical_x(), commit_node.get_logical_y());
+        commit_node.render(screen_pos, style);
     }
     ImGui::End();
 }
@@ -151,8 +153,21 @@ GUI::load_git()
 {
     // TODO: make this do something useful
     m_repository_name = "local";
-    m_commit_nodes.emplace_back("a1b2c3d", "Initial commit", std::vector<std::string>{"main"},
+    m_commit_nodes.emplace_back(50.0f, 50.0f, "a1b2c3d", "Initial commit", std::vector<std::string>{"main"},
                                 std::vector<std::string>{"v1.0"});
+}
+
+ImVec2
+GUI::logical_to_screen(float logical_x, float logical_y) const
+{
+    // TODO: Define the logical coordinate range
+    constexpr float LOGICAL_X_MIN = 0.0f;
+    constexpr float LOGICAL_X_MAX = 100.0f;
+    constexpr float LOGICAL_Y_MIN = 0.0f;
+    constexpr float LOGICAL_Y_MAX = 100.0f;
+    float           screen_x = (logical_x - LOGICAL_X_MIN) / (LOGICAL_X_MAX - LOGICAL_X_MIN) * m_width;
+    float           screen_y = (1.0f - (logical_y - LOGICAL_Y_MIN) / (LOGICAL_Y_MAX - LOGICAL_Y_MIN)) * m_height;
+    return ImVec2(screen_x, screen_y);
 }
 
 }  // namespace glit

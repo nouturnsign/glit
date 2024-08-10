@@ -62,11 +62,17 @@ class GUI
   private:
     /**
      * @brief Render the current frame.
-     *
-     * @param width The width of the window.
-     * @param height The height of the window.
      */
     void render_frame();
+
+    /**
+     * @brief Convert logical coordinates to screen coordinates.
+     *
+     * @param logical_x The logical X coordinate.
+     * @param logical_y The logical Y coordinate.
+     * @return The corresponding screen coordinates.
+     */
+    ImVec2 logical_to_screen(float logical_x, float logical_y) const;
 
     GLFWwindow                     *m_window;          /**< Pointer to the GLFW window. */
     int                             m_width;           /**< Width of the window. */
