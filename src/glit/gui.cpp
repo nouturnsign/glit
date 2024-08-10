@@ -15,12 +15,12 @@
 namespace glit
 {
 
-GUI::GUI(int width, int height, const char *title) : width(width), height(height), window(nullptr)
+GUI::GUI(int width, int height, const char *title) : m_width(width), m_height(height), m_window(nullptr)
 {
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%l] %v");
     try
     {
-        logger = spdlog::basic_logger_mt("console", "logs.txt");
+        m_logger = spdlog::basic_logger_mt("console", "logs.txt");
     }
     catch (const spdlog::spdlog_ex &exc)
     {
@@ -29,11 +29,11 @@ GUI::GUI(int width, int height, const char *title) : width(width), height(height
         throw GUIError(message);
     }
 
-    logger->info("Initializing GUI...");
+    m_logger->info("Initializing GUI...");
 
     if (!glfwInit())
     {
-        logger->error("Failed to initialize GLFW");
+        m_logger->error("Failed to initialize GLFW");
         throw GUIError("Failed to initialize GLFW");
     }
 
@@ -44,85 +44,69 @@ GUI::GUI(int width, int height, const char *title) : width(width), height(height
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (!window)
+    m_window = glfwCreateWindow(width, height, title, NULL, NULL);
+    if (!m_window)
     {
         glfwTerminate();
-        logger->error("Failed to create GLFW window");
+        m_logger->error("Failed to create GLFW window");
         throw GUIError("Failed to create GLFW window");
     }
 
-    glfwMakeContextCurrent(window);
-    setupGlad();
-    setupImgui();
+    glfwMakeContextCurrent(m_window);
+
+    if (!gladLoadGL(glfwGetProcAddress))
+    {
+        m_logger->error("Failed to initialize GLAD");
+        throw GUIError("Failed to initialize GLAD");
+    }
+    m_logger->info("GLAD initialized successfully");
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui::StyleColorsDark();
+    m_logger->info("ImGui initialized successfully");
 }
 
 GUI::~GUI()
 {
-    if (window)
+    if (m_window)
     {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        logger->info("Cleaned up GUI resources");
+        glfwDestroyWindow(m_window);
     }
-}
-
-void
-GUI::setupGlad()
-{
-    if (!gladLoadGL(glfwGetProcAddress))
-    {
-        logger->error("Failed to initialize GLAD");
-        throw GUIError("Failed to initialize GLAD");
-    }
-    logger->info("GLAD initialized successfully");
-}
-
-void
-GUI::setupImgui()
-{
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-    ImGui::StyleColorsDark();
-    logger->info("ImGui initialized successfully");
-}
-
-void
-GUI::renderImgui()
-{
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
-    ImGui::Begin("Hello, world!");
-    ImGui::Text("This is a simple example.");
-    ImGui::End();
-
-    ImGui::Render();
-    int display_w, display_h;
-    glfwGetFramebufferSize(window, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
-    glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    glfwTerminate();
+    m_logger->info("Cleaned up GUI resources");
 }
 
 void
 GUI::run()
 {
-    logger->info("Entering main loop");
-    while (!glfwWindowShouldClose(window))
+    m_logger->info("Entering main loop");
+    while (!glfwWindowShouldClose(m_window))
     {
         glfwPollEvents();
-        renderImgui();
-        glfwSwapBuffers(window);
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::Begin("Hello, world!");
+        ImGui::Text("This is a simple example.");
+        ImGui::End();
+
+        ImGui::Render();
+        int display_w, display_h;
+        glfwGetFramebufferSize(m_window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        glfwSwapBuffers(m_window);
     }
-    logger->info("Exiting main loop");
+    m_logger->info("Exiting main loop");
 }
 
 }  // namespace glit
