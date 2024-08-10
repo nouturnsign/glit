@@ -22,3 +22,5 @@ set(BUILD_TESTS OFF CACHE BOOL "")
 set(BUILD_CLI OFF CACHE BOOL "")
 set(DEPRECATE_HARD ON CACHE BOOL "")
 add_subdirectory(libgit2)
+
+add_subdirectory(spdlog)
