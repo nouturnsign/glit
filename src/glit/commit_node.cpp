@@ -19,7 +19,7 @@ CommitNode::CommitNode(float logical_x, float logical_y, const std::string &hash
 }
 
 void
-CommitNode::render(const ImVec2 &screen_pos, const ImGuiStyle &style) const
+CommitNode::render(ImVec2 screen_pos, const ImGuiStyle &style) const
 {
     const float radius = NODE_RADIUS;
     ImU32       line_color = ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_Text]);
@@ -89,7 +89,7 @@ CommitNode::get_first_line_message() const
 }
 
 void
-CommitNode::render_marker(const ImVec2 &position, const std::string &label, ImU32 color) const
+CommitNode::render_marker(ImVec2 position, const std::string &label, ImU32 color) const
 {
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
     float       marker_radius = 10.0f;

@@ -34,7 +34,7 @@ class CommitNode
      * @param screen_pos The position on the screen where the node should be rendered.
      * @param style The style to render with.
      */
-    void render(const ImVec2 &screen_pos, const ImGuiStyle &style) const;
+    void render(ImVec2 screen_pos, const ImGuiStyle &style) const;
 
     /**
      * @brief Sets the logical X coordinate of the commit node.
@@ -86,7 +86,7 @@ class CommitNode
      * @param label The label to display on the marker.
      * @param color The color of the marker.
      */
-    void render_marker(const ImVec2 &position, const std::string &label, ImU32 color) const;
+    void render_marker(ImVec2 position, const std::string &label, ImU32 color) const;
 
     std::string              m_hash;      /**< Commit hash. */
     std::string              m_message;   /**< Commit message. */

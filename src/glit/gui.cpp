@@ -119,11 +119,22 @@ GUI::render_frame()
         return;
     }
     const ImGuiStyle &style = ImGui::GetStyle();
-    for (const auto &commit_node : m_commit_nodes)
+    for (const CommitNode &commit_node : m_commit_nodes)
     {
         ImVec2 screen_pos = logical_to_screen(commit_node.get_logical_x(), commit_node.get_logical_y());
         commit_node.render(screen_pos, style);
     }
+    for (const CommitEdge &commit_edge : m_commit_edges)
+    {
+        const CommitNode &child = commit_edge.get_child();
+        const CommitNode &parent = commit_edge.get_parent();
+
+        ImVec2 child_screen_pos = logical_to_screen(child.get_logical_x(), child.get_logical_y());
+        ImVec2 parent_screen_pos = logical_to_screen(parent.get_logical_x(), parent.get_logical_y());
+
+        commit_edge.render(child_screen_pos, parent_screen_pos, style);
+    }
+
     ImGui::End();
 }
 
@@ -153,8 +164,11 @@ GUI::load_git()
 {
     // TODO: make this do something useful
     m_repository_name = "local";
-    m_commit_nodes.emplace_back(50.0f, 50.0f, "a1b2c3d", "Initial commit", std::vector<std::string>{"main"},
+    m_commit_nodes.emplace_back(20.0f, 50.0f, "a1b2c3d", "Initial commit", std::vector<std::string>{},
+                                std::vector<std::string>{});
+    m_commit_nodes.emplace_back(70.0f, 50.0f, "a1b2c3d", "HEAD commit", std::vector<std::string>{"main", "HEAD"},
                                 std::vector<std::string>{"v1.0"});
+    m_commit_edges.emplace_back(m_commit_nodes.at(1), m_commit_nodes.at(0));
 }
 
 ImVec2

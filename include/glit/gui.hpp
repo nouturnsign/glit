@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <spdlog/logger.h>
 
+#include "glit/commit_edge.hpp"
 #include "glit/commit_node.hpp"
 
 namespace glit
@@ -80,6 +81,7 @@ class GUI
     std::shared_ptr<spdlog::logger> m_logger;          /**< Logger for application. */
     std::string                     m_repository_name; /**< Name of the repository. */
     std::vector<CommitNode>         m_commit_nodes;    /**< Container for commit nodes. */
+    std::vector<CommitEdge>         m_commit_edges;    /**< Container for commit edges. */
 };
 
 }  // namespace glit
