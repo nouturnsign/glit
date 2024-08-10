@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <spdlog/logger.h>
 
 #include "glit/commit_edge.hpp"
@@ -73,7 +74,7 @@ class GUI
      * @param logical_y The logical Y coordinate.
      * @return The corresponding screen coordinates.
      */
-    ImVec2 logical_to_screen(float logical_x, float logical_y) const;
+    glm::vec2 logical_to_screen(float logical_x, float logical_y) const;
 
     GLFWwindow                     *m_window;          /**< Pointer to the GLFW window. */
     int                             m_width;           /**< Width of the window. */
@@ -82,6 +83,8 @@ class GUI
     std::string                     m_repository_name; /**< Name of the repository. */
     std::vector<CommitNode>         m_commit_nodes;    /**< Container for commit nodes. */
     std::vector<CommitEdge>         m_commit_edges;    /**< Container for commit edges. */
+    float                           m_zoom_factor;     /**< Current zoom factor. */
+    glm::vec2                       m_logical_center;  /**< Current center of screen in logical coordinates. */
 };
 
 }  // namespace glit

@@ -1,5 +1,6 @@
 #include "glit/commit_node.hpp"
 
+#include <glm/glm.hpp>
 #include <imgui.h>
 
 namespace glit
@@ -19,7 +20,7 @@ CommitNode::CommitNode(float logical_x, float logical_y, const std::string &hash
 }
 
 void
-CommitNode::render(ImVec2 screen_pos, const ImGuiStyle &style) const
+CommitNode::render(glm::vec2 screen_pos, const ImGuiStyle &style) const
 {
     const float radius = NODE_RADIUS;
     ImU32       line_color = ImGui::ColorConvertFloat4ToU32(style.Colors[ImGuiCol_Text]);
@@ -28,14 +29,14 @@ CommitNode::render(ImVec2 screen_pos, const ImGuiStyle &style) const
     draw_list->AddCircle(screen_pos, radius, line_color, 12, 1.0f);
 
     // Render node text
-    ImVec2 text_pos(screen_pos.x - radius + 5, screen_pos.y - 10);
+    glm::vec2 text_pos(screen_pos.x - radius + 5, screen_pos.y - 10);
     ImGui::SetCursorScreenPos(text_pos);
     ImGui::Text("%s", get_abbreviated_hash().c_str());
     ImGui::Text("%s", get_first_line_message().c_str());
 
     // Render tags and branches
-    float  marker_radius = 10.0f;
-    ImVec2 marker_offset(0, -radius - 20);
+    float     marker_radius = 10.0f;
+    glm::vec2 marker_offset(0, -radius - 20);
 
     for (const auto &branch : m_branches)
     {
@@ -89,12 +90,12 @@ CommitNode::get_first_line_message() const
 }
 
 void
-CommitNode::render_marker(ImVec2 position, const std::string &label, ImU32 color) const
+CommitNode::render_marker(glm::vec2 position, const std::string &label, ImU32 color) const
 {
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
     float       marker_radius = 10.0f;
     draw_list->AddCircleFilled(position, marker_radius, color);
-    ImGui::SetCursorScreenPos(position + ImVec2(-marker_radius, -marker_radius));
+    ImGui::SetCursorScreenPos(position + glm::vec2(-marker_radius, -marker_radius));
     ImGui::Text("%s", label.c_str());
 }
 

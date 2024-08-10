@@ -1,6 +1,7 @@
 #ifndef GLIT_GLIT_COMMIT_EDGE_HPP_
 #define GLIT_GLIT_COMMIT_EDGE_HPP_
 
+#include <glm/glm.hpp>
 #include <imgui.h>
 
 #include "glit/commit_node.hpp"
@@ -29,7 +30,7 @@ class CommitEdge
      * @param parent_screen_pos The position on the screen where the arrow ends (parent).
      * @param style The style to render with.
      */
-    void render(ImVec2 child_screen_pos, ImVec2 parent_screen_pos, const ImGuiStyle &style) const;
+    void render(glm::vec2 child_screen_pos, glm::vec2 parent_screen_pos, const ImGuiStyle &style) const;
 
     /**
      * @brief Gets the child commit node of the edge.

@@ -14,7 +14,12 @@ namespace glit
 {
 
 GUI::GUI(int width, int height, const char *title, Style theme)
-    : m_width(width), m_height(height), m_window(nullptr), m_repository_name("local")
+    : m_width(width),
+      m_height(height),
+      m_window(nullptr),
+      m_repository_name("local"),
+      m_zoom_factor(1.0f),
+      m_logical_center(0.0f, 0.0f)
 {
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%l] %v");
     try
@@ -121,7 +126,7 @@ GUI::render_frame()
     const ImGuiStyle &style = ImGui::GetStyle();
     for (const CommitNode &commit_node : m_commit_nodes)
     {
-        ImVec2 screen_pos = logical_to_screen(commit_node.get_logical_x(), commit_node.get_logical_y());
+        glm::vec2 screen_pos = logical_to_screen(commit_node.get_logical_x(), commit_node.get_logical_y());
         commit_node.render(screen_pos, style);
     }
     for (const CommitEdge &commit_edge : m_commit_edges)
@@ -129,8 +134,8 @@ GUI::render_frame()
         const CommitNode &child = commit_edge.get_child();
         const CommitNode &parent = commit_edge.get_parent();
 
-        ImVec2 child_screen_pos = logical_to_screen(child.get_logical_x(), child.get_logical_y());
-        ImVec2 parent_screen_pos = logical_to_screen(parent.get_logical_x(), parent.get_logical_y());
+        glm::vec2 child_screen_pos = logical_to_screen(child.get_logical_x(), child.get_logical_y());
+        glm::vec2 parent_screen_pos = logical_to_screen(parent.get_logical_x(), parent.get_logical_y());
 
         commit_edge.render(child_screen_pos, parent_screen_pos, style);
     }
@@ -171,17 +176,14 @@ GUI::load_git()
     m_commit_edges.emplace_back(m_commit_nodes.at(1), m_commit_nodes.at(0));
 }
 
-ImVec2
+glm::vec2
 GUI::logical_to_screen(float logical_x, float logical_y) const
 {
-    // TODO: Define the logical coordinate range
-    constexpr float LOGICAL_X_MIN = 0.0f;
-    constexpr float LOGICAL_X_MAX = 100.0f;
-    constexpr float LOGICAL_Y_MIN = 0.0f;
-    constexpr float LOGICAL_Y_MAX = 100.0f;
-    float           screen_x = (logical_x - LOGICAL_X_MIN) / (LOGICAL_X_MAX - LOGICAL_X_MIN) * m_width;
-    float           screen_y = (1.0f - (logical_y - LOGICAL_Y_MIN) / (LOGICAL_Y_MAX - LOGICAL_Y_MIN)) * m_height;
-    return ImVec2(screen_x, screen_y);
+    // FIXME: fix conversion
+    glm::vec2 scaled_pos = (glm::vec2(logical_x, logical_y) - m_logical_center) * m_zoom_factor;
+    glm::vec2 screen_pos = (scaled_pos + glm::vec2(m_width, m_height) / 2.0f);
+
+    return screen_pos;
 }
 
 }  // namespace glit
