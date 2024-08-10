@@ -6,16 +6,34 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/spdlog.h>
 
 #include "glit/error.hpp"
+#include "spdlog/common.h"
 
 namespace glit
 {
 
 GUI::GUI(int width, int height, const char *title) : width(width), height(height), window(nullptr)
 {
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%l] %v");
+    try
+    {
+        logger = spdlog::basic_logger_mt("console", "logs.txt");
+    }
+    catch (const spdlog::spdlog_ex &exc)
+    {
+        std::string message = "Unable to initialize logger, reason: ";
+        message += exc.what();
+        throw GUIError(message);
+    }
+
+    logger->info("Initializing GUI...");
+
     if (!glfwInit())
     {
+        logger->error("Failed to initialize GLFW");
         throw GUIError("Failed to initialize GLFW");
     }
 
@@ -30,6 +48,7 @@ GUI::GUI(int width, int height, const char *title) : width(width), height(height
     if (!window)
     {
         glfwTerminate();
+        logger->error("Failed to create GLFW window");
         throw GUIError("Failed to create GLFW window");
     }
 
@@ -47,6 +66,7 @@ GUI::~GUI()
         ImGui::DestroyContext();
         glfwDestroyWindow(window);
         glfwTerminate();
+        logger->info("Cleaned up GUI resources");
     }
 }
 
@@ -55,8 +75,10 @@ GUI::setupGlad()
 {
     if (!gladLoadGL(glfwGetProcAddress))
     {
+        logger->error("Failed to initialize GLAD");
         throw GUIError("Failed to initialize GLAD");
     }
+    logger->info("GLAD initialized successfully");
 }
 
 void
@@ -67,6 +89,7 @@ GUI::setupImgui()
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
     ImGui::StyleColorsDark();
+    logger->info("ImGui initialized successfully");
 }
 
 void
@@ -92,12 +115,14 @@ GUI::renderImgui()
 void
 GUI::run()
 {
+    logger->info("Entering main loop");
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
         renderImgui();
         glfwSwapBuffers(window);
     }
+    logger->info("Exiting main loop");
 }
 
 }  // namespace glit
