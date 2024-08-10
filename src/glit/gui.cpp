@@ -13,7 +13,8 @@
 namespace glit
 {
 
-GUI::GUI(int width, int height, const char *title, Style theme) : m_width(width), m_height(height), m_window(nullptr)
+GUI::GUI(int width, int height, const char *title, Style theme)
+    : m_width(width), m_height(height), m_window(nullptr), m_repository_name("local")
 {
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%l] %v");
     try
@@ -91,9 +92,12 @@ GUI::run()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Hello, world!");
-        ImGui::Text("This is a simple example.");
-        ImGui::End();
+        int width, height;
+        glfwGetWindowSize(m_window, &width, &height);
+        ImGui::SetNextWindowSize(ImVec2(width, height));  // ensures ImGui fits the GLFW window
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+
+        render_frame();
 
         ImGui::Render();
         int display_w, display_h;
@@ -104,6 +108,21 @@ GUI::run()
         glfwSwapBuffers(m_window);
     }
     m_logger->info("Exiting main loop");
+}
+
+void
+GUI::render_frame()
+{
+    if (!ImGui::Begin(m_repository_name.c_str(), NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+    {
+        ImGui::End();
+        return;
+    }
+    for (const auto &commit_node : m_commit_nodes)
+    {
+        commit_node.render();
+    }
+    ImGui::End();
 }
 
 void
@@ -125,6 +144,15 @@ GUI::set_style(Style style)
             glClearColor(0.0f, 0.0f, 0.0f, 1.00f);
             break;
     }
+}
+
+void
+GUI::load_git()
+{
+    // TODO: make this do something useful
+    m_repository_name = "local";
+    m_commit_nodes.emplace_back("a1b2c3d", "Initial commit", std::vector<std::string>{"main"},
+                                std::vector<std::string>{"v1.0"});
 }
 
 }  // namespace glit

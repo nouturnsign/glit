@@ -72,6 +72,7 @@ main(int argc, char *argv[]) noexcept
     try
     {
         glit::GUI gui(width, height, title.c_str(), style);
+        gui.load_git();
         gui.run();
     }
     catch (const glit::GUIError &exc)

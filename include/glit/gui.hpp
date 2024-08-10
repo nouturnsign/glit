@@ -4,8 +4,9 @@
 #include <memory>
 
 #include <GLFW/glfw3.h>
+#include <spdlog/logger.h>
 
-#include "spdlog/logger.h"
+#include "glit/commit_node.hpp"
 
 namespace glit
 {
@@ -53,11 +54,26 @@ class GUI
      */
     void set_style(Style style);
 
+    /**
+     * @brief Sets up the GUI to render a git graph.
+     */
+    void load_git();
+
   private:
-    GLFWwindow                     *m_window; /**< Pointer to the GLFW window. */
-    int                             m_width;  /**< Width of the window. */
-    int                             m_height; /**< Height of the window. */
-    std::shared_ptr<spdlog::logger> m_logger; /**< Logger for application. */
+    /**
+     * @brief Render the current frame.
+     *
+     * @param width The width of the window.
+     * @param height The height of the window.
+     */
+    void render_frame();
+
+    GLFWwindow                     *m_window;          /**< Pointer to the GLFW window. */
+    int                             m_width;           /**< Width of the window. */
+    int                             m_height;          /**< Height of the window. */
+    std::shared_ptr<spdlog::logger> m_logger;          /**< Logger for application. */
+    std::string                     m_repository_name; /**< Name of the repository. */
+    std::vector<CommitNode>         m_commit_nodes;    /**< Container for commit nodes. */
 };
 
 }  // namespace glit
