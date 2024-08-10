@@ -8,7 +8,7 @@ main() noexcept
 {
     try
     {
-        glit::GUI gui(640, 480, "glit");
+        glit::GUI gui(640, 480, "glit", glit::Style::Classic);
         gui.run();
     }
     catch (const glit::GUIError &e)

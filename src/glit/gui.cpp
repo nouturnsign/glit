@@ -4,18 +4,16 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <glad/gl.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
 
 #include "glit/error.hpp"
-#include "spdlog/common.h"
 
 namespace glit
 {
 
-GUI::GUI(int width, int height, const char *title) : m_width(width), m_height(height), m_window(nullptr)
+GUI::GUI(int width, int height, const char *title, Style theme) : m_width(width), m_height(height), m_window(nullptr)
 {
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%l] %v");
     try
@@ -65,7 +63,7 @@ GUI::GUI(int width, int height, const char *title) : m_width(width), m_height(he
     ImGui::CreateContext();
     ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-    ImGui::StyleColorsDark();
+    set_style(theme);
     m_logger->info("ImGui initialized successfully");
 }
 
@@ -101,12 +99,32 @@ GUI::run()
         int display_w, display_h;
         glfwGetFramebufferSize(m_window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(m_window);
     }
     m_logger->info("Exiting main loop");
+}
+
+void
+GUI::set_style(Style style)
+{
+    switch (style)
+    {
+        case Style::Light:
+            ImGui::StyleColorsLight();
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            break;
+        case Style::Classic:
+            ImGui::StyleColorsClassic();
+            glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+            break;
+        case Style::Dark:
+        default:
+            ImGui::StyleColorsDark();
+            glClearColor(0.0f, 0.0f, 0.0f, 1.00f);
+            break;
+    }
 }
 
 }  // namespace glit
