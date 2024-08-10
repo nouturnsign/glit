@@ -10,7 +10,7 @@ ColumnLimit: 120
 DerivePointerAlignment: false
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: '^<.*/.*|.*imgui.*>$'
+  - Regex: '^<.*/.*|.*imgui.*|.*cxxopts.*>$'
     Priority: 3
   - Regex: '^[^/]*\.h$'
     Priority: 1

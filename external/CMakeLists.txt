@@ -16,13 +16,14 @@ target_include_directories(imgui PUBLIC imgui imgui/backends glfw/include)
 # User-Installable Dependencies (either use user-installed or bundled submodule)
 
 if(GLIT_USE_INSTALLED_DEPS)
-    message(STATUS "glit - Using user-installed dependencies for GLFW, GLM, libgit2, and spdlog")
+    message(STATUS "glit - Using user-installed dependencies for GLFW, GLM, libgit2, spdlog, and cxxopts")
     find_package(glfw3 3.4 REQUIRED)
     find_package(glm 1.0.1 REQUIRED)
     find_package(libgit2 1.8.1 REQUIRED)
     find_package(spdlog 1.14.1 REQUIRED)
+    find_package(cxxopts 3.2.1 REQUIRED)
 else()
-    message(STATUS "glit - Using bundled dependencies for GLFW, GLM, libgit2, and spdlog")
+    message(STATUS "glit - Using bundled dependencies for GLFW, GLM, libgit2, spdlog, and cxxopts")
 
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "")
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "")
@@ -39,4 +40,6 @@ else()
     add_subdirectory(libgit2)
 
     add_subdirectory(spdlog)
+
+    add_subdirectory(cxxopts)
 endif()

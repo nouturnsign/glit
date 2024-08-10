@@ -22,7 +22,7 @@ message(STATUS "glit - Configuring external dependencies")
 add_subdirectory(external)
 add_executable(${PROJECT_NAME} src/main.cpp)
 add_subdirectory(src)
-target_link_libraries(${PROJECT_NAME} PUBLIC glad_gl_core_33 glfw glm::glm imgui libgit2package spdlog::spdlog)
+target_link_libraries(${PROJECT_NAME} PUBLIC glad_gl_core_33 glfw glm::glm imgui libgit2package spdlog::spdlog cxxopts::cxxopts)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE -DGLFW_INCLUDE_NONE)
 
