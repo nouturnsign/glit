@@ -70,11 +70,10 @@ class GUI
     /**
      * @brief Convert logical coordinates to screen coordinates.
      *
-     * @param logical_x The logical X coordinate.
-     * @param logical_y The logical Y coordinate.
+     * @param logical_pos The logical (x, y) coordinates.
      * @return The corresponding screen coordinates.
      */
-    glm::vec2 logical_to_screen(float logical_x, float logical_y) const;
+    glm::vec2 logical_to_screen(glm::vec2 logical_pos) const;
 
     GLFWwindow                     *m_window;          /**< Pointer to the GLFW window. */
     int                             m_width;           /**< Width of the window. */

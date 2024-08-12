@@ -126,7 +126,7 @@ GUI::render_frame()
     const ImGuiStyle &style = ImGui::GetStyle();
     for (const CommitNode &commit_node : m_commit_nodes)
     {
-        glm::vec2 screen_pos = logical_to_screen(commit_node.get_logical_x(), commit_node.get_logical_y());
+        glm::vec2 screen_pos = logical_to_screen(commit_node.get_logical_pos());
         commit_node.render(screen_pos, style);
     }
     for (const CommitEdge &commit_edge : m_commit_edges)
@@ -134,8 +134,8 @@ GUI::render_frame()
         const CommitNode &child = commit_edge.get_child();
         const CommitNode &parent = commit_edge.get_parent();
 
-        glm::vec2 child_screen_pos = logical_to_screen(child.get_logical_x(), child.get_logical_y());
-        glm::vec2 parent_screen_pos = logical_to_screen(parent.get_logical_x(), parent.get_logical_y());
+        glm::vec2 child_screen_pos = logical_to_screen(child.get_logical_pos());
+        glm::vec2 parent_screen_pos = logical_to_screen(parent.get_logical_pos());
 
         commit_edge.render(child_screen_pos, parent_screen_pos, style);
     }
@@ -169,20 +169,18 @@ GUI::load_git()
 {
     // TODO: make this do something useful
     m_repository_name = "local";
-    m_commit_nodes.emplace_back(20.0f, 50.0f, "a1b2c3d", "Initial commit", std::vector<std::string>{},
+    m_commit_nodes.emplace_back(glm::vec2{20.0f, 50.0f}, "a1b2c3d", "Initial commit", std::vector<std::string>{},
                                 std::vector<std::string>{});
-    m_commit_nodes.emplace_back(70.0f, 50.0f, "a1b2c3d", "HEAD commit", std::vector<std::string>{"main", "HEAD"},
-                                std::vector<std::string>{"v1.0"});
+    m_commit_nodes.emplace_back(glm::vec2{70.0f, 50.0f}, "a1b2c3d", "HEAD commit",
+                                std::vector<std::string>{"main", "HEAD"}, std::vector<std::string>{"v1.0"});
     m_commit_edges.emplace_back(m_commit_nodes.at(1), m_commit_nodes.at(0));
 }
 
 glm::vec2
-GUI::logical_to_screen(float logical_x, float logical_y) const
+GUI::logical_to_screen(glm::vec2 logical_pos) const
 {
-    // FIXME: fix conversion
-    glm::vec2 scaled_pos = (glm::vec2(logical_x, logical_y) - m_logical_center) * m_zoom_factor;
-    glm::vec2 screen_pos = (scaled_pos + glm::vec2(m_width, m_height) / 2.0f);
-
+    glm::vec2 scaled_pos = (logical_pos - m_logical_center) * m_zoom_factor;
+    glm::vec2 screen_pos = scaled_pos + glm::vec2(m_width, m_height) / 2.0f;
     return screen_pos;
 }
 

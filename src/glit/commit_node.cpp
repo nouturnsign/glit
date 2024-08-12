@@ -8,14 +8,9 @@ namespace glit
 
 constexpr float NODE_RADIUS = 40.0f;  // TODO: determine radius from screen
 
-CommitNode::CommitNode(float logical_x, float logical_y, const std::string &hash, const std::string &message,
+CommitNode::CommitNode(glm::vec2 logical_pos, const std::string &hash, const std::string &message,
                        const std::vector<std::string> &branches, const std::vector<std::string> &tags)
-    : m_logical_x(logical_x),
-      m_logical_y(logical_y),
-      m_hash(hash),
-      m_message(message),
-      m_branches(branches),
-      m_tags(tags)
+    : m_hash(hash), m_message(message), m_branches(branches), m_tags(tags), m_logical_pos(logical_pos)
 {
 }
 
@@ -53,27 +48,15 @@ CommitNode::render(glm::vec2 screen_pos, const ImGuiStyle &style) const
 }
 
 void
-CommitNode::set_logical_x(float logical_x)
+CommitNode::set_logical_pos(glm::vec2 logical_pos)
 {
-    m_logical_x = logical_x;
+    m_logical_pos = logical_pos;
 }
 
-void
-CommitNode::set_logical_y(float logical_y)
+glm::vec2
+CommitNode::get_logical_pos() const
 {
-    m_logical_y = logical_y;
-}
-
-float
-CommitNode::get_logical_x() const
-{
-    return m_logical_x;
-}
-
-float
-CommitNode::get_logical_y() const
-{
-    return m_logical_y;
+    return m_logical_pos;
 }
 
 std::string

@@ -19,14 +19,13 @@ class CommitNode
     /**
      * @brief Constructs a CommitNode instance.
      *
-     * @param logical_x The x-coordinate in logical coordinates.
-     * @param logical_y The y-coordinate in logical coordinates.
+     * @param logical_pos The (x, y) coordinates in logical coordinates.
      * @param hash The hash of the commit.
      * @param message The commit message.
      * @param branches A list of branches associated with the commit.
      * @param tags A list of tags associated with the commit.
      */
-    CommitNode(float logical_x, float logical_y, const std::string &hash, const std::string &message,
+    CommitNode(glm::vec2 logical_pos, const std::string &hash, const std::string &message,
                const std::vector<std::string> &branches = {}, const std::vector<std::string> &tags = {});
 
     /**
@@ -38,32 +37,18 @@ class CommitNode
     void render(glm::vec2 screen_pos, const ImGuiStyle &style) const;
 
     /**
-     * @brief Sets the logical X coordinate of the commit node.
+     * @brief Sets the logical (x, y) coordinates of the commit node.
      *
-     * @param logical_x The logical X coordinate.
+     * @param logical_pos The logical (x, y) coordinates.
      */
-    void set_logical_x(float logical_x);
+    void set_logical_pos(glm::vec2 logical_pos);
 
     /**
-     * @brief Sets the logical Y coordinate of the commit node.
+     * @brief Gets the logical (x, y) coordinates of the commit node.
      *
-     * @param logical_y The logical Y coordinate.
+     * @return The logical (x, y) coordinates.
      */
-    void set_logical_y(float logical_y);
-
-    /**
-     * @brief Gets the logical X coordinate of the commit node.
-     *
-     * @return The logical X coordinate.
-     */
-    float get_logical_x() const;
-
-    /**
-     * @brief Gets the logical Y coordinate of the commit node.
-     *
-     * @return The logical Y coordinate.
-     */
-    float get_logical_y() const;
+    glm::vec2 get_logical_pos() const;
 
   private:
     /**
@@ -89,12 +74,11 @@ class CommitNode
      */
     void render_marker(glm::vec2 position, const std::string &label, ImU32 color) const;
 
-    std::string              m_hash;      /**< Commit hash. */
-    std::string              m_message;   /**< Commit message. */
-    std::vector<std::string> m_tags;      /**< Tags associated with the commit. */
-    std::vector<std::string> m_branches;  /**< Branches associated with the commit. */
-    float                    m_logical_x; /**< Logical X coordinate. */
-    float                    m_logical_y; /**< Logical Y coordinate. */
+    std::string              m_hash;        /**< Commit hash. */
+    std::string              m_message;     /**< Commit message. */
+    std::vector<std::string> m_tags;        /**< Tags associated with the commit. */
+    std::vector<std::string> m_branches;    /**< Branches associated with the commit. */
+    glm::vec2                m_logical_pos; /**< Position in logical (x, y) coordinates. */
 };
 
 }  // namespace glit
